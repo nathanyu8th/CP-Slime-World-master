@@ -28,8 +28,11 @@ class Overworld extends Phaser.Scene {
         const treeLayer = map.createLayer('Trees', tileset, 0, 0)
 
         terrainLayer.setCollisionByProperty({ collides: true })
+        treeLayer.setCollisionByProperty({ collides: true })
+
+        const slimeSpawn = map.findObject('Spawns', obj =>obj.name === 'slimeSpawn')
         // add slime
-        this.slime = this.physics.add.sprite(32, 32, 'slime', 0)
+        this.slime = this.physics.add.sprite(slimeSpawn.x, slimeSpawn.y, 'slime', 0)
         this.slime.body.setCollideWorldBounds(true)
 
         // slime animation
@@ -52,6 +55,7 @@ class Overworld extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
 
         this.physics.add.collider(this.slime, terrainLayer)
+        this.physics.add.collider(this.slime, treeLayer)
 
         // input
         this.cursors = this.input.keyboard.createCursorKeys()
